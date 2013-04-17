@@ -1,4 +1,27 @@
+'''
+To use this:
+
+The first time you ever run this code, cleanedCrimeData.json will be in the ast format
+so when you run it the first time make sure that line 43 is uncommented
+
+Anytime after the first, the format of the source you are compying into will be in json format, so you 
+need to make sure that you comment line 43 and uncomment line 44
+
+This will overwrite your source crime file in order to keep track of which crimes you have logged, so
+make sure you create a backup somewhere just in case.
+
+You also need to make a file in your data folder named 'usedAddresses' there is no extension.
+
+TO RUN:
+You are going to want to use this to run:
+python latLng.py >> ../data/crimeLatLng.json
+
+The '>>' will allow you to append to that file as you write instead of overwriting all the time.
+This 'crimeLatLng.json' is the restulting file we are after.  
+'''
+
 from pygeocoder import Geocoder
+from pygeocoder import GeocoderError
 import ast
 import json
 import threading
@@ -52,7 +75,7 @@ for crime in crimeData:
 
 writeBack = open('../data/cleanedCrimeData.json', 'wb')
 for crime in crimeData:
-	writeBack.write(crime)
+	json.dump(crime, writeBack)
 writeBack.close()
 
 f = open('../data/usedAddresses', 'wb')
