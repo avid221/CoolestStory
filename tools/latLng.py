@@ -11,9 +11,7 @@ def coder(crimeAddress, usedAddresses):
 		result = Geocoder.geocode(crimeAddress)
 		return result
 	except GeocoderError:
-		f = open('../data/usedAddresses', 'wb')
-		pickle.dump(usedAddresses, f)
-		f.close()
+		return 1
 
 f = open('../data/cleanedCrimeData.json', 'rb')
 
@@ -38,12 +36,16 @@ for crime in crimeData:
 		addressData = {}
 		time.sleep(3)
 		results = coder(crime['address'], addresses)
-		addressData['coords'] = results[0].coordinates
-		crime['coords'] = results[0].coordinates
 
-		newDict = {}
-		newDict[crime['address']] = addressData
-		addresses.append(newDict)
+		if results == 1:
+			break
+		else:
+			addressData['coords'] = results[0].coordinates
+			crime['coords'] = results[0].coordinates
+
+			newDict = {}
+			newDict[crime['address']] = addressData
+			addresses.append(newDict)
 
 	print crime
 	del(crime)
