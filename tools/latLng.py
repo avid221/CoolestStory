@@ -15,14 +15,12 @@ def coder(crimeAddress, usedAddresses):
 		pickle.dump(usedAddresses, f)
 		f.close()
 
-		print 'query limit reached, used addresses have been pickled.'
-
-f = open('../data/test.json', 'rb')
+f = open('../data/cleanedCrimeData.json', 'rb')
 
 crimeData = []
 for line in f:
-	#crimeData.append(ast.literal_eval(line))
-	crimeData.append(json.loads(line))
+	crimeData.append(ast.literal_eval(line))
+	#crimeData.append(json.loads(line))
 f.close()
 
 f = open('../data/usedAddresses', 'rb')
