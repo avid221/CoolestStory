@@ -46,6 +46,12 @@ for crime in crimeData:
 		addresses.append(newDict)
 
 	print crime
+	del(crime)
+
+writeBack = open('../data/cleanedCrimeData.json', 'wb')
+for crime in crimeData:
+	writeBack.write(crime)
+writeBack.close()
 
 f = open('../data/usedAddresses', 'wb')
 pickle.dump(addresses, f)
