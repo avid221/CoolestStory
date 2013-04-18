@@ -83,7 +83,7 @@
       //Open the Business JSON and plot the Business on Map
       $.getJSON('data/yelpBusiness.json', function(data) {
         $.each(data, function(key, val) {
-          var image = 'images/mm_20_green.png';
+          var image = 'images/default.png';
 
           //Some Restaurants are not Food
           if (val['categories'].indexOf('Restaurants') != -1){
@@ -198,7 +198,7 @@
             position: myLatLng,
             map: map,
             title: val['name'],
-            icon: image
+            icon: new google.maps.MarkerImage(image,null,null,null, new google.maps.Size(25,27))
           });
         });
       });
