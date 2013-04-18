@@ -84,21 +84,49 @@
       $.getJSON('data/yelpBusiness.json', function(data) {
         $.each(data, function(key, val) {
           var image = 'images/mm_20_green.png';
-          if (!val['categories'].indexOf('Food') || !val['categories'].indexOf('Restaurants')) {
+
+          if (val['categories'].indexOf('Food') != -1) {
             var image = 'images/food.png';
+            if (val['categories'].indexOf('Restaurants') != -1){
+              var image = 'images/restaurant.png';
+            }
+            if (val['categories'].indexOf('Fast Food') != -1){
+              var image = 'images/fastfood.png';
+            }
+            if(val['categories'].indexOf('Bakeries') != -1){
+              var image = 'images/bakeries.png';
+            }
+            if(val['categories'].indexOf('Grocery') != -1){
+              var image = 'images/grocery.png';
+            }
+            if(val['categories'].indexOf('Sandwiches') != -1){
+             var image = 'images/sandwich.png';
+            }
           }
-          if(!val['categories'].indexOf('Bars')){
+
+          if(val['categories'].indexOf('Bars') != -1){
             var image = 'images/bars.png';
           }
-          if(!val['categories'].indexOf('Coffee & Tea')){
+          if(val['categories'].indexOf('Coffee & Tea') != -1){
             var image = 'images/coffee.png';
           }
-          if(!val['categories'].indexOf('Shopping')){
+          if(val['categories'].indexOf('Shopping') != -1){
             var image = 'images/shopping.png';
           }
-          if(!val['categories'].indexOf('Health & Medical') || !val['categories'].indexOf('Drugstores')){
+
+          if(val['categories'].indexOf('Health & Medical') != -1) {
             var image = 'images/health.png';
+            if(val['categories'].indexOf('Dentists') != -1 || val['categories'].indexOf('General Dentistry') != -1 || val['categories'].indexOf('General Dentistry') != -1) {
+              var image = 'images/dentist.png';
+            }
+            if(val['categories'].indexOf('Hospitals') != -1) {
+              var image = 'images/hospital.png';
+            }
+            if(val['categories'].indexOf('Pharmacy') != -1) {
+              var image = 'images/pharmacy.png';
+            }
           }
+
           var myLatLng = new google.maps.LatLng(val['latitude'], val['longitude']);
           //console.log(lo);
           //items.push('<li id="' + key + '">' + val + '</li>');
