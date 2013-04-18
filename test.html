@@ -88,6 +88,18 @@
           //Some Restaurants are not Food
           if (val['categories'].indexOf('Restaurants') != -1){
             var image = 'images/restaurant.png';
+            if (val['categories'].indexOf('Indian') != -1){
+              var image = 'images/indian.png';
+            }
+            if (val['categories'].indexOf('Korean') != -1){
+              var image = 'images/korean.png';
+            }
+            if (val['categories'].indexOf('Greek') != -1){
+              var image = 'images/greek.png';
+            }
+            if (val['categories'].indexOf('Japanese') != -1){
+              var image = 'images/japanese.png';
+            }
           }
    
           //Food Section
@@ -95,6 +107,18 @@
             var image = 'images/food.png';
             if (val['categories'].indexOf('Restaurants') != -1){
               var image = 'images/restaurant.png';
+              if (val['categories'].indexOf('Indian') != -1){
+                var image = 'images/indian.png';
+              }
+              if (val['categories'].indexOf('Korean') != -1){
+                var image = 'images/korean.png';
+              }
+              if (val['categories'].indexOf('Greek') != -1){
+                var image = 'images/greek.png';
+              }
+              if (val['categories'].indexOf('Japanese') != -1){
+                var image = 'images/japanese.png';
+              }
             }
             if (val['categories'].indexOf('Fast Food') != -1){
               var image = 'images/fastfood.png';
@@ -140,6 +164,13 @@
 
           if(val['categories'].indexOf('Golf') != -1 || val['categories'].indexOf('Mini Golf') != -1) {
             var image = 'images/golf.png';
+          }
+
+          if(val['categories'].indexOf('Parks') != -1) {
+            var image = 'images/park.png';
+          }
+          if(val['categories'].indexOf('Gyms') != -1) {
+            var image = 'images/gym.png';
           }
 
           var myLatLng = new google.maps.LatLng(val['latitude'], val['longitude']);
