@@ -74,7 +74,7 @@
 
         // Limit the zoom level
         google.maps.event.addListener(map, 'zoom_changed', function() {
-          if (map.getZoom() < 13) map.setZoom(13);
+          if (map.getZoom() < 10) map.setZoom(10);
         });
       }
       //Window Open, setup the map
@@ -100,6 +100,15 @@
             if (val['categories'].indexOf('Japanese') != -1){
               var image = 'images/japanese.png';
             }
+            if (val['categories'].indexOf('Chinese') != -1){
+              var image = 'images/chinese.png';
+            }
+            if (val['categories'].indexOf('Mexican') != -1){
+              var image = 'images/mexican.png';
+            }
+            if (val['categories'].indexOf('Italian') != -1){
+              var image = 'images/italian.png';
+            }
           }
    
           //Food Section
@@ -118,6 +127,15 @@
               }
               if (val['categories'].indexOf('Japanese') != -1){
                 var image = 'images/japanese.png';
+              }
+              if (val['categories'].indexOf('Chinese') != -1){
+                var image = 'images/chinese.png';
+              }
+              if (val['categories'].indexOf('Mexican') != -1){
+                var image = 'images/mexican.png';
+              }
+              if (val['categories'].indexOf('Italian') != -1){
+                var image = 'images/italian.png';
               }
             }
             if (val['categories'].indexOf('Fast Food') != -1){
