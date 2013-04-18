@@ -85,6 +85,12 @@
         $.each(data, function(key, val) {
           var image = 'images/mm_20_green.png';
 
+          //Some Restaurants are not Food
+          if (val['categories'].indexOf('Restaurants') != -1){
+            var image = 'images/restaurant.png';
+          }
+   
+          //Food Section
           if (val['categories'].indexOf('Food') != -1) {
             var image = 'images/food.png';
             if (val['categories'].indexOf('Restaurants') != -1){
@@ -102,18 +108,23 @@
             if(val['categories'].indexOf('Sandwiches') != -1){
              var image = 'images/sandwich.png';
             }
+            if (val['categories'].indexOf('Pizza') != -1){
+              var image = 'images/pizza.png';
+            }
           }
 
+          //Drink Section
           if(val['categories'].indexOf('Bars') != -1){
             var image = 'images/bars.png';
           }
-          if(val['categories'].indexOf('Coffee & Tea') != -1){
+          if(val['categories'].indexOf('Coffee & Tea') != -1 || val['categories'].indexOf('Cafes') != -1){
             var image = 'images/coffee.png';
           }
           if(val['categories'].indexOf('Shopping') != -1){
             var image = 'images/shopping.png';
           }
 
+          //Health Section
           if(val['categories'].indexOf('Health & Medical') != -1) {
             var image = 'images/health.png';
             if(val['categories'].indexOf('Dentists') != -1 || val['categories'].indexOf('General Dentistry') != -1 || val['categories'].indexOf('General Dentistry') != -1) {
@@ -125,6 +136,10 @@
             if(val['categories'].indexOf('Pharmacy') != -1) {
               var image = 'images/pharmacy.png';
             }
+          }
+
+          if(val['categories'].indexOf('Golf') != -1 || val['categories'].indexOf('Mini Golf') != -1) {
+            var image = 'images/golf.png';
           }
 
           var myLatLng = new google.maps.LatLng(val['latitude'], val['longitude']);
