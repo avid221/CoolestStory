@@ -9,6 +9,12 @@
     </script>
     <script type="text/javascript" src="jquery-1.9.1.js"> </script>
     <script type="text/javascript">
+
+      //Hide Details
+      $('#details').hide();
+
+      var markers = [];
+
       function initialize() {
         var styles = [
           {
@@ -74,6 +80,8 @@
           if (map.getZoom() < 10) map.setZoom(10);
         });
       }
+
+
       //Window Open, setup the map
       google.maps.event.addDomListener(window, 'load', initialize);
 
@@ -203,8 +211,8 @@
             var image = 'images/casino.png';
           }
           var myLatLng = new google.maps.LatLng(val['latitude'], val['longitude']);
-          //console.log(lo);
-          //items.push('<li id="' + key + '">' + val + '</li>');
+
+          // Create Marker
           var marker = new google.maps.Marker({
             position: myLatLng,
             map: map,
@@ -212,15 +220,68 @@
             icon: new google.maps.MarkerImage(image,null,null,null, new google.maps.Size(25,27))
           });
 
+          marker.category = val['categories'];
+          marker.name = val['name'];
+
+          //Add Marker to Marker List
+          markers.push(marker);
+
+          //Show Details of Marker when Clicked in Side Panel
           google.maps.event.addListener(marker, 'click', function() {
-            document.getElementById("info").innerHTML=val['name'];
+            document.getElementById("name_val").innerText=val['name'];
+            document.getElementById("add_val").innerText=val['full_address'];
+            document.getElementById("cat_val").innerText=val['categories'];
+            document.getElementById("open_val").innerText=val['open'];
+            document.getElementById("review_val").innerText=val['review_count'];
+            document.getElementById("rate_val").innerText=val['stars'];
+
+
+            //Show Details and Hide Instructions
+            document.getElementById("tab").style.display = 'block';
+            document.getElementById("ins").style.display = 'none';
           });
         });
       });
     </script>
   </head>
+
   <body>
     <div id="map-canvas"/> </div>
-    <div id="info"/><p class="blank">Click on a business to begin.</p></div>
+    <div id="info"/>
+      <div class='container'>
+        <div id='ins' class='instruct'>
+          <div class='itext'><p class="blank">Click on a business to begin.</p></div>
+        </div>
+        <div id="tab" class="details">
+          <ul class="vtabs"><li><a href="#tab3_1">Details</a></li></ul>
+          <div id="admin" class="vinner">
+            <div class="drow">
+              <div class="dlabel">Name</div>
+              <div id="name_val" class="dvalue"></div>
+            </div>
+            <div class="drow">
+              <div class="dlabel">Address</div>
+              <div id="add_val" class="dvalue"></div>
+            </div>
+            <div class="drow">
+              <div class="dlabel">Category</div>
+              <div id="cat_val" class="dvalue"></div>
+            </div>
+            <div class="drow">
+              <div class="dlabel">Currently Open</div>
+              <div id="open_val" class="dvalue"></div>
+            </div>
+            <div class="drow">
+              <div class="dlabel">Review Count</div>
+              <div id="review_val" class="dvalue"></div>
+            </div>
+            <div class="drow">
+              <div class="dlabel">Rating</div>
+              <div id="rate_val" class="dvalue"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
