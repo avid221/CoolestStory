@@ -40,8 +40,8 @@ f = open('../data/cleanedCrimeData.json', 'rb')
 
 crimeData = []
 for line in f:
-	crimeData.append(ast.literal_eval(line))
-	#crimeData.append(json.loads(line))
+	#crimeData.append(ast.literal_eval(line))
+	crimeData.append(json.loads(line))
 f.close()
 
 f = open('../data/usedAddresses', 'rb')
@@ -74,8 +74,7 @@ for crime in crimeData:
 	del(crime)
 
 writeBack = open('../data/cleanedCrimeData.json', 'wb')
-for crime in crimeData:
-	json.dump(crime, writeBack)
+json.dump(crimeData, writeBack, indent=4, separators=(',', ': '))
 writeBack.close()
 
 f = open('../data/usedAddresses', 'wb')
