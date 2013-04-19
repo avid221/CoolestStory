@@ -7,9 +7,20 @@ body {
 	padding: 0 
 }
 #map-canvas { 
-	height: 90%; 
-	width: 50%; 
+	float: left;
+	height: 80%;
+	width: 70%; 
 	border: 5px solid black;
 	margin-left: 20px;
 	margin-top: 40px;
 }
+#info {
+	float: right;
+	border: 5px solid black;
+	height: 80%;
+	width: 20%;
+	margin-top: 40px;
+	margin-right: 20px;
+}
+
+.blank {font-size:48px; color: #C2C2C2; margin:15px}
