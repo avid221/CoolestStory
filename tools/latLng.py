@@ -36,12 +36,12 @@ def coder(crimeAddress, usedAddresses):
 	except GeocoderError:
 		return 1
 
-f = open('../data/cleanedCrimeData.json', 'rb')
+f = open('../data/2011_DATA.json', 'rb')
 
 crimeData = []
 for line in f:
-	#crimeData.append(ast.literal_eval(line))
-	crimeData.append(json.loads(line))
+	crimeData.append(ast.literal_eval(line))
+	#crimeData.append(json.loads(line))
 f.close()
 
 f = open('../data/usedAddresses', 'rb')
@@ -73,8 +73,9 @@ for crime in crimeData:
 	print crime
 	del(crime)
 
-writeBack = open('../data/cleanedCrimeData.json', 'wb')
-json.dump(crimeData, writeBack, indent=4, separators=(',', ': '))
+writeBack = open('../data/2011_DATA.json', 'wb')
+for crime in crimeData:
+	json.dump(crimeData, writeBack)
 writeBack.close()
 
 f = open('../data/usedAddresses', 'wb')
