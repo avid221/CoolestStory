@@ -4,11 +4,6 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <title>Cool Story Bro</title>
     <link rel="stylesheet" href="css/index.css" />
-    <style type="text/css">
-      html { height: 100% }
-      body { height: 100%; margin: 0; padding: 0 }
-      #map-canvas { height: 90%; width: 40%; margin: 40; border: 5px solid black;}
-    </style>
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkqioUZBKHC9K_6aUQZjQ0EXlQXaYIkQo&sensor=false">
     </script>
@@ -210,17 +205,22 @@
           var myLatLng = new google.maps.LatLng(val['latitude'], val['longitude']);
           //console.log(lo);
           //items.push('<li id="' + key + '">' + val + '</li>');
-          new google.maps.Marker({
+          var marker = new google.maps.Marker({
             position: myLatLng,
             map: map,
             title: val['name'],
             icon: new google.maps.MarkerImage(image,null,null,null, new google.maps.Size(25,27))
+          });
+
+          google.maps.event.addListener(marker, 'click', function() {
+            document.getElementById("info").innerHTML=val['name'];
           });
         });
       });
     </script>
   </head>
   <body>
-    <div id="map-canvas"/>
+    <div id="map-canvas"/> </div>
+    <div id="info"/><p class="blank">Click on a business to begin.</p></div>
   </body>
 </html>

@@ -1,0 +1,26 @@
+html { 
+	height: 100% 
+}
+body { 
+	height: 100%; 
+	margin: 0; 
+	padding: 0 
+}
+#map-canvas { 
+	float: left;
+	height: 80%;
+	width: 70%; 
+	border: 5px solid black;
+	margin-left: 20px;
+	margin-top: 40px;
+}
+#info {
+	float: right;
+	border: 5px solid black;
+	height: 80%;
+	width: 20%;
+	margin-top: 40px;
+	margin-right: 20px;
+}
+
+.blank {font-size:48px; color: #C2C2C2; margin:15px}
