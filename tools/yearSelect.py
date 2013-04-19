@@ -1,10 +1,15 @@
+'''
+RUN:
+python yearSelect.py > [whateverFileYouWant].json
+'''
+
 import ast
 import json
 
 f = open('../data/cleanedCrimeData.json', 'rb')
 
 yearlyCrime = []
-YEAR = 11 #Place year here.
+YEAR = 12 #Place year here.
 
 for line in f:
 	crime = ast.literal_eval(line)
@@ -14,7 +19,5 @@ for line in f:
 
 f.close()
 
-newFile = open('../data/2011_DATA.json', 'wb')
-
 for crime in yearlyCrime:
-	json.dump(crime, newFile)
+	print crime

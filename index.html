@@ -231,9 +231,8 @@
             document.getElementById("name_val").innerText=val['name'];
             document.getElementById("add_val").innerText=val['full_address'];
             document.getElementById("cat_val").innerText=val['categories'];
-            document.getElementById("open_val").innerText=val['open'];
             document.getElementById("review_val").innerText=val['review_count'];
-            document.getElementById("rate_val").innerText=val['stars'];
+            document.getElementById("rate_val").innerText=val['stars'] + ' out of 5.';
 
 
             //Show Details and Hide Instructions
@@ -246,6 +245,7 @@
   </head>
 
   <body>
+    <div id="business-filters"></div>
     <div id="map-canvas"/> </div>
     <div id="info"/>
       <div class='container'>
@@ -266,10 +266,6 @@
             <div class="drow">
               <div class="dlabel">Category</div>
               <div id="cat_val" class="dvalue"></div>
-            </div>
-            <div class="drow">
-              <div class="dlabel">Currently Open</div>
-              <div id="open_val" class="dvalue"></div>
             </div>
             <div class="drow">
               <div class="dlabel">Review Count</div>

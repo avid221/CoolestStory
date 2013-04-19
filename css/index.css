@@ -10,13 +10,22 @@ body {
 	font-weight: 300;
 	background: #99CCFF;
 }
+#business-filters{
+	background:#F0F2F2;
+	border: 5px solid black;
+	width: 70%;
+	float: top;
+	height: 10%;
+	margin-left: 20px;
+	margin-top: 2%;
+}
 #map-canvas { 
 	float: left;
 	height: 80%;
 	width: 70%; 
 	border: 5px solid black;
 	margin-left: 20px;
-	margin-top: 40px;
+	margin-top: 10px;
 }
 #info {
 	background:#F0F2F2;
@@ -24,7 +33,7 @@ body {
 	border: 5px solid black;
 	height: 80%;
 	width: 20%;
-	margin-top: 40px;
+	margin-top: 10px;
 	margin-right: 20px;
 }
 
