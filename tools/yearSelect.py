@@ -16,4 +16,4 @@ f.close()
 
 newFile = open('../data/YEAR_DATA.json', 'wb')
 
-json.dump(yearlyCrime, newFile)
+json.dump(yearlyCrime, newFile, indent=4, separators=(',', ': '))
