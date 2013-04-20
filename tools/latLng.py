@@ -75,7 +75,7 @@ for crime in crimeData:
 
 writeBack = open('../data/2012_DATA.json', 'wb')
 for crime in crimeData:
-	json.dump(crimeData, writeBack)
+	json.dumps(crimeData, writeBack)
 writeBack.close()
 
 f = open('../data/usedAddresses', 'wb')
