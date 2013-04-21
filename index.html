@@ -2,7 +2,8 @@
 <html>
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <title>Cool Story Bro</title>
+    <title>Strime</title>
+    <link rel="shortcut icon" type="image/png" href="http://i.imgur.com/6zxfUl0.png" />
     <link rel="stylesheet" href="css/index.css" />
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkqioUZBKHC9K_6aUQZjQ0EXlQXaYIkQo&sensor=false&libraries=visualization">
@@ -11,6 +12,43 @@
     <script type="text/javascript">
       var markers = [];
       var crimes = [];
+
+
+      function boxclick(box,category){
+        if (box.checked){
+          show(category);
+        }else {
+          hide(category);
+        }
+        document.getElementById("tab").style.display = 'none';
+        document.getElementById("ins").style.display = 'block';
+
+      }
+
+      function show(category){
+        for (var i=0; i<markers.length; i++){
+          if (category == 'all'){
+            markers[i].setVisible(true);
+            continue;
+          }
+          if (markers[i].category.indexOf(category) != -1) {
+            markers[i].setVisible(true);
+          }
+        }
+
+      }
+
+      function hide(category){
+        for (var i=0; i<markers.length; i++){
+          if (category == 'all'){
+            markers[i].setVisible(false);
+            continue;
+          }
+          if (markers[i].category.indexOf(category) != -1) {
+            markers[i].setVisible(false);
+          }
+        }
+      }
 
       //Dropdown Magic
       function DropDown(el) {
@@ -274,6 +312,8 @@
             icon: new google.maps.MarkerImage(image,null,null,null, new google.maps.Size(25,27))
           });
 
+          //Make marker not visible for startup
+          marker.setVisible(false);
           marker.category = val['categories'];
           marker.name = val['name'];
 
@@ -311,9 +351,10 @@
     <div id="business-filters">
       <div id="dd" class="wrapper-dropdown-4">Businesses
         <ul class="dropdown">
-          <li><input type="checkbox" id="el-1" name="el-1" value="donut"><label for="el-1">Eat a donut</label></li>
-          <li><input type="checkbox" id="el-2" name="el-2" value="neighbour"><label for="el-2">Spy on my neighbours</label></li>
-          <li><input type="checkbox" id="el-3" name="el-3" value="T-rex"><label for="el-3">Feed my T-rex</label></li>
+          <li><input type="checkbox" onClick="boxclick(this,'all')" id="el-0" name="el-0"><label for="el-0">All</label></li>
+          <li><input type="checkbox" onClick="boxclick(this,'Restaurants')" id="el-1" name="el-1"><label for="el-1">Restaurants</label></li>
+          <li><input type="checkbox" onClick="boxclick(this,'Health & Medical')" id="el-2" name="el-2"><label for="el-2">Health & Medical</label></li>
+          <li><input type="checkbox" onClick="boxclick(this,'Beauty & Spas')" id="el-3" name="el-3"><label for="el-3">Beauty & Spas</label></li>
         </ul>
       </div>
     </div>
