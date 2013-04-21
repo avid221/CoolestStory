@@ -9,11 +9,54 @@
     </script>
     <script type="text/javascript" src="jquery-1.9.1.js"> </script>
     <script type="text/javascript">
-
-      //Hide Details
-      $('#details').hide();
-
       var markers = [];
+
+      //Dropdown Magic
+      function DropDown(el) {
+        this.dd = el;
+        this.opts = this.dd.find('ul.dropdown > li');
+        this.val = [];
+        this.index = [];
+        this.initEvents();
+      }
+
+      DropDown.prototype = {
+        initEvents : function() {
+          var obj = this;
+
+          obj.dd.on('click', function(event){
+            $(this).toggleClass('active');
+            event.stopPropagation();
+          });
+
+          obj.opts.children('label').on('click',function(event){
+            var opt = $(this).parent(),
+              chbox = opt.children('input'),
+              val = chbox.val(),
+              idx = opt.index();
+
+            ($.inArray(val, obj.val) !== -1) ? obj.val.splice( $.inArray(val, obj.val), 1 ) : obj.val.push( val );
+            ($.inArray(idx, obj.index) !== -1) ? obj.index.splice( $.inArray(idx, obj.index), 1 ) : obj.index.push( idx );
+          });
+        },
+        getValue : function() {
+          return this.val;
+        },
+        getIndex : function() {
+          return this.index;
+        }
+      }
+
+      $(function() {
+
+        var dd = new DropDown( $('#dd') );
+
+        $(document).click(function() {
+          // all dropdowns
+          $('.wrapper-dropdown-4').removeClass('active');
+        });
+
+      });
 
       function initialize() {
         var styles = [
@@ -44,6 +87,7 @@
 
         var mapOptions = {
           center: new google.maps.LatLng(33.4486, -112.0743),
+          noClear: true,
           zoom: 13,
           mapTypeControlOptions: {
             mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
@@ -245,15 +289,23 @@
   </head>
 
   <body>
-    <div id="business-filters"></div>
+    <div id="business-filters">
+      <div id="dd" class="wrapper-dropdown-4">Businesses
+        <ul class="dropdown">
+          <li><input type="checkbox" id="el-1" name="el-1" value="donut"><label for="el-1">Eat a donut</label></li>
+          <li><input type="checkbox" id="el-2" name="el-2" value="neighbour"><label for="el-2">Spy on my neighbours</label></li>
+          <li><input type="checkbox" id="el-3" name="el-3" value="T-rex"><label for="el-3">Feed my T-rex</label></li>
+        </ul>
+      </div>
+    </div>
     <div id="map-canvas"/> </div>
-    <div id="info"/>
+    <div id="info">
       <div class='container'>
         <div id='ins' class='instruct'>
           <div class='itext'><p class="blank">Click on a business to begin.</p></div>
         </div>
         <div id="tab" class="details">
-          <ul class="vtabs"><li><a href="#tab3_1">Details</a></li></ul>
+          <ul class="vtabs"><li class="active"><a href="#tab3_1">Details</a></li></ul>
           <div id="admin" class="vinner">
             <div class="drow">
               <div class="dlabel">Name</div>
