@@ -5,11 +5,12 @@
     <title>Cool Story Bro</title>
     <link rel="stylesheet" href="css/index.css" />
     <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkqioUZBKHC9K_6aUQZjQ0EXlQXaYIkQo&sensor=false">
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkqioUZBKHC9K_6aUQZjQ0EXlQXaYIkQo&sensor=false&libraries=visualization">
     </script>
     <script type="text/javascript" src="jquery-1.9.1.js"> </script>
     <script type="text/javascript">
       var markers = [];
+      var crimes = [];
 
       //Dropdown Magic
       function DropDown(el) {
@@ -123,6 +124,13 @@
         google.maps.event.addListener(map, 'zoom_changed', function() {
           if (map.getZoom() < 10) map.setZoom(10);
         });
+
+        var heatmap = new google.maps.visualization.HeatmapLayer({
+          data: crimes
+        });
+
+        heatmap.setMap(map);
+
       }
 
 
@@ -283,6 +291,15 @@
             document.getElementById("tab").style.display = 'block';
             document.getElementById("ins").style.display = 'none';
           });
+        });
+      });
+      
+      //Crime Data
+      $.getJSON('testData/testcrimes.json', function(data) {
+        $.each(data, function(key, val) {
+          var crime = new google.maps.LatLng(val['coords'][0],val['coords'][1]);
+          console.log(crime);
+          crimes.push(crime);
         });
       });
     </script>
