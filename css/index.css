@@ -8,9 +8,10 @@ body {
 	padding: 0;
 	font-weight: 300;
 	background-color:#fff;
-	background: rgb(112,146,190) url('../images/strime.png') no-repeat right top;
+	background: rgb(112,146,190) no-repeat right top;
+    /*url('../images/strime.png')*/
 }
-#business-filters{
+#filters{
 	float: top;
 	background:#F0F2F2;
 	border: 5px solid black;
@@ -20,6 +21,44 @@ body {
 	padding-top: 20px;
 	overflow: visible;
 	position: relative;
+}
+#business{
+    position: absolute;
+    top:25%;
+    left:0;
+}
+#crimeop{
+    position: absolute;
+    left: 120px;
+}
+#opacity{
+    position: absolute;
+    top:20%;
+    right:32%;
+    width: 350px;
+    height: 10px;
+}
+#slider{
+    position: absolute;
+    top: 25px;
+    width: 350px;
+}
+#slider .ui-slider-range { background: #729fcf; }
+#slider .ui-slider-handle { border-color: #729fcf; }
+#crime{
+    position: absolute;
+    top:25%;
+    right:26.4%;
+}
+#logo {
+    position: absolute;
+    top: 2px;
+    right: 50px;
+    height: 10%;
+    width: 20%;
+}
+#logoimg{
+    width: 100%;
 }
 #map-canvas { 
 	float: left;
@@ -38,7 +77,13 @@ body {
 	margin-top: 10px;
 	margin-right: 20px;
 }
-
+#authors{
+    font-family: "Brush Script MT", cursive;
+    color: #fff;
+    position: absolute;
+    bottom: -10px;
+    right: 30px;
+}
 .drow {border-bottom: 1px dotted #ACB3B3; width:100%; float:left;}
 .dlabel{border:none; font-size:14px; color:#707070 ; vertical-align:top; text-align:right; padding: 5px; width:75px; float:left;}
 .dvalue{border:none; font-size:12px; vertical-align:top; padding: 5px 15px 5px 5px; }
@@ -68,7 +113,7 @@ a.infob:hover{background:#303030 ; text-decoration:none;}
     position: absolute;
     width: 270px;
     margin: 0 auto;
-    padding: 10px 10px 10px 30px;
+    padding: 10px 10px 10px 10px;
     z-index: 999999999;
 
     /* Styles */
@@ -115,33 +160,7 @@ a.infob:hover{background:#303030 ; text-decoration:none;}
     pointer-events: none;
 }
 
-/* Red lines: the pseudo-elements way */
-.wrapper-dropdown-4 .dropdown:before,
-.wrapper-dropdown-4:before {
-    content: "";
-    width: 4px;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 15px;
-    border: 1px solid rgb(112,146,190);
-    border-top: none;
-    border-bottom: none;
-    z-index: 2;
-}
 
-/* Red lines: the gradients way */
-
-/*
-.wrapper-dropdown-4 .dropdown,
-.wrapper-dropdown-4 {
-  background: linear-gradient(left, white 5%, #ffaa9f 5%, #ffaa9f 5.3%, white 5.3%, white 6.5%, #ffaa9f 6.5%, #ffaa9f 6.8%, white 6.8%);
-}
-
-.wrapper-dropdown-4 .dropdown li:hover label {
-  background: linear-gradient(left, #f0F0F0 5%, #ffaa9f 5%, #ffaa9f 5.3%, #f0F0F0 5.3%, #f0F0F0 6.5%, #ffaa9f 6.5%, #ffaa9f 6.8%, #f0F0F0 6.8%);
-}
-*/
 
 .wrapper-dropdown-4 .dropdown li {
     position: relative; /* Enable absolute positioning for checkboxes */
@@ -149,8 +168,8 @@ a.infob:hover{background:#303030 ; text-decoration:none;}
 
 .wrapper-dropdown-4 .dropdown li label {
     display: block;
-    padding: 10px 10px 10px 30px; /* Same padding as the button */
-    border-bottom: 1px dotted #1ccfcf;
+    padding: 5px 0px 5px 0px; /* Same padding as the button */
+    border-bottom: 1px dotted rgb(112,146,190);
     -webkit-transition: all 0.3s ease-out;
     -moz-transition: all 0.3s ease-out;
     -ms-transition: all 0.3s ease-out;
@@ -180,7 +199,7 @@ a.infob:hover{background:#303030 ; text-decoration:none;}
 
 .wrapper-dropdown-4 .dropdown li input:checked ~ label {
     color: grey;
-    text-decoration: line-through;
+    /*text-decoration: line-through;*/
 }
 
 /* Active state */
@@ -196,7 +215,7 @@ a.infob:hover{background:#303030 ; text-decoration:none;}
 
 /* No CSS3 support */
 
-.no-opacity       wrapper-dropdown-4 .dropdown,
+.no-opacity       .wrapper-dropdown-4 .dropdown,
 .no-pointerevents .wrapper-dropdown-4 .dropdown {
     display: none;
     opacity: 1; /* If opacity support but no pointer-events support */

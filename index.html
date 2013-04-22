@@ -5,13 +5,14 @@
     <title>Strime</title>
     <link rel="shortcut icon" type="image/png" href="http://i.imgur.com/6zxfUl0.png" />
     <link rel="stylesheet" href="css/index.css" />
-    <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkqioUZBKHC9K_6aUQZjQ0EXlQXaYIkQo&sensor=false&libraries=visualization">
-    </script>
-    <script type="text/javascript" src="jquery-1.9.1.js"> </script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkqioUZBKHC9K_6aUQZjQ0EXlQXaYIkQo&sensor=false&libraries=visualization"></script>
     <script type="text/javascript">
       var markers = [];
-      var crimes = [];
+      var murder, theft, assault, robbery = [];
+      var heatmap, map;
 
 
       function boxclick(box,category){
@@ -88,7 +89,8 @@
 
       $(function() {
 
-        var dd = new DropDown( $('#dd') );
+        var biz = new DropDown( $('#biz') );
+        var cri = new DropDown( $('#cri') );
 
         $(document).click(function() {
           // all dropdowns
@@ -147,7 +149,6 @@
 
         //Grab last center of Map
         var lastValidCenter = map.getCenter();
-        console.log('The first center ' + lastValidCenter);
         //Lock the user to Phoenix area by checking center positions queued by panning
         google.maps.event.addListener(map, 'center_changed', function() {
           if(allowedBounds.contains(map.getCenter())) {
@@ -165,17 +166,27 @@
           if (map.getZoom() < 10) map.setZoom(10);
         });
 
-        var heatmap = new google.maps.visualization.HeatmapLayer({
+        heatmap = new google.maps.visualization.HeatmapLayer({
           data: crimes
         });
 
         heatmap.setMap(map);
+        heatmap.setOptions({radius: heatmap.get('radius') ? null : 40});
 
       }
 
-
-      //Window Open, setup the map
-      google.maps.event.addDomListener(window, 'load', initialize);
+      //Opacity Slider
+      $(function() {
+        $("#slider").slider({
+          value:.6,
+          min: 0,
+          max: .8,
+          step: .2,
+          slide: function( event, ui ) {
+            heatmap.setOptions({opacity: ui.value});
+          }
+        });
+      });
 
       //Open the Business JSON and plot the Business on Map
       $.getJSON('data/yelpBusiness.json', function(data) {
@@ -340,30 +351,54 @@
       $.getJSON('testData/testcrimes.json', function(data) {
         $.each(data, function(key, val) {
           var crime = new google.maps.LatLng(val['coords'][0],val['coords'][1]);
-          console.log(crime);
+          //console.log(crime);
           crimes.push(crime);
         });
       });
+      
+      //Window Open, setup the map
+      google.maps.event.addDomListener(window, 'load', initialize);
     </script>
   </head>
 
   <body>
-    <div id="business-filters">
-      <div id="dd" class="wrapper-dropdown-4">Businesses
-        <ul class="dropdown">
-          <li><input type="checkbox" onClick="boxclick(this,'all')" id="el-0" name="el-0"><label for="el-0">All</label></li>
-          <li><input type="checkbox" onClick="boxclick(this,'Restaurants')" id="el-1" name="el-1"><label for="el-1">Restaurants</label></li>
-          <li><input type="checkbox" onClick="boxclick(this,'Health & Medical')" id="el-2" name="el-2"><label for="el-2">Health & Medical</label></li>
-          <li><input type="checkbox" onClick="boxclick(this,'Beauty & Spas')" id="el-3" name="el-3"><label for="el-3">Beauty & Spas</label></li>
-          <li><input type="checkbox" onClick="boxclick(this,'Hotels')" id="el-4" name="el-4"><label for="el-4">Hotels</label></li>
-        </ul>
+    <div id="filters">
+      <div id="business">
+        <div id="biz" class="wrapper-dropdown-4">Business
+          <ul class="dropdown">
+            <li><input type="checkbox" onClick="boxclick(this,'all')" id="b-0" name="b-0"><label for="b-0">All</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Restaurants')" id="b-1" name="b-1"><label for="b-1">Restaurants</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Health & Medical')" id="b-2" name="b-2"><label for="b-2">Health & Medical</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Beauty & Spas')" id="b-3" name="b-3"><label for="b-3">Beauty & Spas</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Hotels')" id="b-4" name="b-4"><label for="b-4">Hotels</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Parks')" id="b-5" name="b-5"><label for="b-5">Parks</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Golf')" id="b-6" name="b-6"><label for="b-6">Golf</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Gyms')" id="b-7" name="b-7"><label for="b-7">Gyms</label></li>
+          </ul>
+        </div>
+      </div>
+      <div id="opacity">
+        <label id="crimeop">Crime Opacity</label>
+        <div id="slider"></div>
+      </div>
+      <div id="crime">
+        <div id="cri"  class="wrapper-dropdown-4">Crime
+          <ul class="dropdown">
+            <li><input type="checkbox" onClick="boxclick(this,'all')" id="c-0" name="c-0"><label for="c-0">All</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Restaurants')" id="c-1" name="c-1"><label for="c-1">Murder</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Health & Medical')" id="c-2" name="c-2"><label for="c-2">Theft</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Beauty & Spas')" id="c-3" name="c-3"><label for="c-3">Assault</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Hotels')" id="c-4" name="c-4"><label for="c-4">Robbery</label></li>
+          </ul>
+        </div>
       </div>
     </div>
+    <div id="logo"> <img id="logoimg" src="images/strime.png"/></div>
     <div id="map-canvas"/> </div>
     <div id="info">
       <div class='container'>
         <div id='ins' class='instruct'>
-          <div class='itext'><p class="blank">Click on a business to begin.</p></div>
+          <div class='itext'><p class="blank">Welcome to Strime!<br><br>Choose any filter from the menus to begin. <br><br>Click on a business for more info.</p></div>
         </div>
         <div id="tab" class="details">
           <ul class="vtabs"><li class="active"><a href="#tab3_1">Details</a></li></ul>
@@ -391,6 +426,9 @@
           </div>
         </div>
       </div>
+    </div>
+    <div id="authors">
+      <p>Created By: Avid Ghamsari & Blake Pavel </p>
     </div>
   </body>
 </html>
