@@ -88,7 +88,7 @@ a.infob:hover{background:#303030 ; text-decoration:none;}
     margin-top: -3px;
     border-width: 6px 6px 0 6px;
     border-style: solid;
-    border-color: #ffaa9f transparent;
+    border-color: rgb(112,146,190) transparent;
 }
 
 .wrapper-dropdown-4 .dropdown {
@@ -124,7 +124,7 @@ a.infob:hover{background:#303030 ; text-decoration:none;}
     position: absolute;
     top: 0;
     left: 15px;
-    border: 1px solid #ffaa9f;
+    border: 1px solid rgb(112,146,190);
     border-top: none;
     border-bottom: none;
     z-index: 2;
