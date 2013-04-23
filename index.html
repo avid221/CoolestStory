@@ -11,19 +11,66 @@
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkqioUZBKHC9K_6aUQZjQ0EXlQXaYIkQo&sensor=false&libraries=visualization"></script>
     <script type="text/javascript">
       var markers = [];
-      var murder = [];
       var theft = [];
       var assault = []; 
       var robbery = [];
-      var heatmap, map;
+      var arrest = [];
+      var burglary = [];
+      var theftheat, assaultheat, robberyheat, arrestheat, burglaryheat;
+      var map;
 
 
       function boxclick(box,category){
-        if (box.checked){
-          show(category);
-        }else {
-          hide(category);
+        if (box.name == 'b'){
+          console.log('yo')
+          if (box.checked){
+            show(category);
+          }else {
+            hide(category);
+          }
         }
+        if (box.name == 'c'){
+          if (box.checked){
+            console.log(category);
+            switch (category){
+              case 'Assault':
+                console.log('yo');
+                assaultheat.setMap(map);
+                break;
+              case 'Arrest':
+                arrestheat.setMap(map);
+                break;
+              case 'Burglary':
+                burglaryheat.setMap(map);
+                break;
+              case 'Robbery':
+                robberyheat.setMap(map);
+                break;
+              case 'Theft':
+                theftheat.setMap(map);
+                break;
+            }
+          }else {
+            switch (category){
+              case 'Assault':
+                assaultheat.setMap(null);
+                break;
+              case 'Arrest':
+                arrestheat.setMap(null);
+                break;
+              case 'Burglary':
+                burglaryheat.setMap(null);
+                break;
+              case 'Robbery':
+                robberyheat.setMap(null);
+                break;
+              case 'Theft':
+                theftheat.setMap(null);
+                break;
+            }
+          }
+        }
+
         document.getElementById("tab").style.display = 'none';
         document.getElementById("ins").style.display = 'block';
 
@@ -169,13 +216,21 @@
           if (map.getZoom() < 10) map.setZoom(10);
         });
 
-        heatmap = new google.maps.visualization.HeatmapLayer({
-          data: murder
+        theftheat = new google.maps.visualization.HeatmapLayer({
+          data: theft
         });
-
-        heatmap.setMap(map);
-        heatmap.setOptions({radius: heatmap.get('radius') ? null : 40});
-
+        assaultheat = new google.maps.visualization.HeatmapLayer({
+          data: assault
+        });
+        robberyheat = new google.maps.visualization.HeatmapLayer({
+          data: robbery
+        });
+        arrestheat = new google.maps.visualization.HeatmapLayer({
+          data: arrest
+        });
+        burglaryheat = new google.maps.visualization.HeatmapLayer({
+          data: burglary
+        });
       }
 
       //Opacity Slider
@@ -186,8 +241,12 @@
           max: .8,
           step: .2,
           slide: function( event, ui ) {
-            console.log(ui.value);
-            heatmap.setOptions({opacity: ui.value});
+            theftheat.setOptions({opacity: ui.value});
+            assaultheat.setOptions({opacity: ui.value});
+            robberyheat.setOptions({opacity: ui.value});
+            arrestheat.setOptions({opacity: ui.value});
+            burglaryheat.setOptions({opacity: ui.value});
+
           }
         });
       });
@@ -351,14 +410,35 @@
         });
       });
 
+      /*
+      //Sample Crime Data
+      $.getJSON('testData/testcrimes.json', function(data) {
+        $.each(data, function(key, val) {
+          var crime = new google.maps.LatLng(val['coords'][0],val['coords'][1]);
+          murder.push(crime);
+        });
+      });
+      */
+
       //Crime Data
       $.getJSON('data/2007LatLng.json', function(data) {
-        console.log('hi');
         $.each(data, function(key, val) {
-          console.log('hi');
           var crime = new google.maps.LatLng(val['Latitude'],val['Longitude']);
-          console.log(val['Latitude']);
-          murder.push(crime);
+          if (val['Type'] == 'Assault'){
+            assault.push(crime);
+          }
+          if (val['Type'] == 'Arrest'){
+            arrest.push(crime);
+          }
+          if (val['Type'] == 'Burglary'){
+            burglary.push(crime);
+          }
+          if (val['Type'] == 'Robbery'){
+            robbery.push(crime);
+          }
+          if (val['Type'] == 'Theft'){
+            theft.push(crime);
+          }          
         });
       });
 
@@ -368,7 +448,18 @@
           console.log('hi');
           var crime = new google.maps.LatLng(val['Latitude'],val['Longitude']);
           console.log(val['Latitude']);
-          murder.push(crime);
+          if (val['Type'] == 'Assault'){
+            assault.push(crime);
+          }
+          if (val['Type'] == 'Arrest'){
+            arrest.push(crime);
+          }
+          if (val['Type'] == 'Robbery'){
+            robbery.push(crime);
+          }
+          if (val['Type'] == 'Theft'){
+            theft.push(crime);
+          }  
         });
       });
 
@@ -378,7 +469,18 @@
           console.log('hi');
           var crime = new google.maps.LatLng(val['Latitude'],val['Longitude']);
           console.log(val['Latitude']);
-          murder.push(crime);
+          if (val['Type'] == 'Assault'){
+            assault.push(crime);
+          }
+          if (val['Type'] == 'Arrest'){
+            arrest.push(crime);
+          }
+          if (val['Type'] == 'Robbery'){
+            robbery.push(crime);
+          }
+          if (val['Type'] == 'Theft'){
+            theft.push(crime);
+          }  
         });
       });
 
@@ -388,7 +490,18 @@
           console.log('hi');
           var crime = new google.maps.LatLng(val['Latitude'],val['Longitude']);
           console.log(val['Latitude']);
-          murder.push(crime);
+          if (val['Type'] == 'Assault'){
+            assault.push(crime);
+          }
+          if (val['Type'] == 'Arrest'){
+            arrest.push(crime);
+          }
+          if (val['Type'] == 'Robbery'){
+            robbery.push(crime);
+          }
+          if (val['Type'] == 'Theft'){
+            theft.push(crime);
+          }  
         });
       });
 
@@ -398,9 +511,22 @@
           console.log('hi');
           var crime = new google.maps.LatLng(val['Latitude'],val['Longitude']);
           console.log(val['Latitude']);
-          murder.push(crime);
+          if (val['Type'] == 'Assault'){
+            assault.push(crime);
+          }
+          if (val['Type'] == 'Arrest'){
+            arrest.push(crime);
+          }
+          if (val['Type'] == 'Robbery'){
+            robbery.push(crime);
+          }
+          if (val['Type'] == 'Theft'){
+            theft.push(crime);
+          }  
         });
       });
+
+
 
       //Window Open, setup the map
       google.maps.event.addDomListener(window, 'load', initialize);
@@ -413,14 +539,15 @@
       <div id="business">
         <div id="biz" class="wrapper-dropdown-4">Business
           <ul class="dropdown">
-            <li><input type="checkbox" onClick="boxclick(this,'all')" id="b-0" name="b-0"><label for="b-0">All</label></li>
-            <li><input type="checkbox" onClick="boxclick(this,'Restaurants')" id="b-1" name="b-1"><label for="b-1">Restaurants</label></li>
-            <li><input type="checkbox" onClick="boxclick(this,'Health & Medical')" id="b-2" name="b-2"><label for="b-2">Health & Medical</label></li>
-            <li><input type="checkbox" onClick="boxclick(this,'Beauty & Spas')" id="b-3" name="b-3"><label for="b-3">Beauty & Spas</label></li>
-            <li><input type="checkbox" onClick="boxclick(this,'Hotels')" id="b-4" name="b-4"><label for="b-4">Hotels</label></li>
-            <li><input type="checkbox" onClick="boxclick(this,'Parks')" id="b-5" name="b-5"><label for="b-5">Parks</label></li>
-            <li><input type="checkbox" onClick="boxclick(this,'Golf')" id="b-6" name="b-6"><label for="b-6">Golf</label></li>
-            <li><input type="checkbox" onClick="boxclick(this,'Gyms')" id="b-7" name="b-7"><label for="b-7">Gyms</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'all')" id="b-0" name="b"><label for="b-0">All</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Restaurants')" id="b-1" name="b"><label for="b-1">Restaurants</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Health & Medical')" id="b-2" name="b"><label for="b-2">Health & Medical</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Beauty & Spas')" id="b-3" name="b"><label for="b-3">Beauty & Spas</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Hotels')" id="b-4" name="b"><label for="b-4">Hotels</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Parks')" id="b-5" name="b"><label for="b-5">Parks</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Golf')" id="b-6" name="b"><label for="b-6">Golf</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Gyms')" id="b-7" name="b"><label for="b-7">Gyms</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Bars')" id="b-8" name="b"><label for="b-8">Bars</label></li>
           </ul>
         </div>
       </div>
@@ -431,11 +558,11 @@
       <div id="crime">
         <div id="cri"  class="wrapper-dropdown-4">Crime
           <ul class="dropdown">
-            <li><input type="checkbox" onClick="boxclick(this,'all')" id="c-0" name="c-0"><label for="c-0">All</label></li>
-            <li><input type="checkbox" onClick="boxclick(this,'Restaurants')" id="c-1" name="c-1"><label for="c-1">Murder</label></li>
-            <li><input type="checkbox" onClick="boxclick(this,'Health & Medical')" id="c-2" name="c-2"><label for="c-2">Theft</label></li>
-            <li><input type="checkbox" onClick="boxclick(this,'Beauty & Spas')" id="c-3" name="c-3"><label for="c-3">Assault</label></li>
-            <li><input type="checkbox" onClick="boxclick(this,'Hotels')" id="c-4" name="c-4"><label for="c-4">Robbery</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Assault')" id="c-1" name="c"><label for="c-1">Assault</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Arrest')" id="c-2" name="c"><label for="c-2">Arrest</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Burglary')" id="c-3" name="c"><label for="c-3">Burglary</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Robbery')" id="c-4" name="c"><label for="c-4">Robbery</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Theft')" id="c-5" name="c"><label for="c-5">Theft</label></li>
           </ul>
         </div>
       </div>
