@@ -5,21 +5,72 @@
     <title>Strime</title>
     <link rel="shortcut icon" type="image/png" href="http://i.imgur.com/6zxfUl0.png" />
     <link rel="stylesheet" href="css/index.css" />
-    <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkqioUZBKHC9K_6aUQZjQ0EXlQXaYIkQo&sensor=false&libraries=visualization">
-    </script>
-    <script type="text/javascript" src="jquery-1.9.1.js"> </script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkqioUZBKHC9K_6aUQZjQ0EXlQXaYIkQo&sensor=false&libraries=visualization"></script>
     <script type="text/javascript">
       var markers = [];
-      var crimes = [];
+      var theft = [];
+      var assault = []; 
+      var robbery = [];
+      var arrest = [];
+      var burglary = [];
+      var theftheat, assaultheat, robberyheat, arrestheat, burglaryheat;
+      var map;
 
 
       function boxclick(box,category){
-        if (box.checked){
-          show(category);
-        }else {
-          hide(category);
+        if (box.name == 'b'){
+          console.log('yo')
+          if (box.checked){
+            show(category);
+          }else {
+            hide(category);
+          }
         }
+        if (box.name == 'c'){
+          if (box.checked){
+            console.log(category);
+            switch (category){
+              case 'Assault':
+                console.log('yo');
+                assaultheat.setMap(map);
+                break;
+              case 'Arrest':
+                arrestheat.setMap(map);
+                break;
+              case 'Burglary':
+                burglaryheat.setMap(map);
+                break;
+              case 'Robbery':
+                robberyheat.setMap(map);
+                break;
+              case 'Theft':
+                theftheat.setMap(map);
+                break;
+            }
+          }else {
+            switch (category){
+              case 'Assault':
+                assaultheat.setMap(null);
+                break;
+              case 'Arrest':
+                arrestheat.setMap(null);
+                break;
+              case 'Burglary':
+                burglaryheat.setMap(null);
+                break;
+              case 'Robbery':
+                robberyheat.setMap(null);
+                break;
+              case 'Theft':
+                theftheat.setMap(null);
+                break;
+            }
+          }
+        }
+
         document.getElementById("tab").style.display = 'none';
         document.getElementById("ins").style.display = 'block';
 
@@ -88,7 +139,8 @@
 
       $(function() {
 
-        var dd = new DropDown( $('#dd') );
+        var biz = new DropDown( $('#biz') );
+        var cri = new DropDown( $('#cri') );
 
         $(document).click(function() {
           // all dropdowns
@@ -147,7 +199,6 @@
 
         //Grab last center of Map
         var lastValidCenter = map.getCenter();
-        console.log('The first center ' + lastValidCenter);
         //Lock the user to Phoenix area by checking center positions queued by panning
         google.maps.event.addListener(map, 'center_changed', function() {
           if(allowedBounds.contains(map.getCenter())) {
@@ -165,17 +216,40 @@
           if (map.getZoom() < 10) map.setZoom(10);
         });
 
-        var heatmap = new google.maps.visualization.HeatmapLayer({
-          data: crimes
+        theftheat = new google.maps.visualization.HeatmapLayer({
+          data: theft
         });
-
-        heatmap.setMap(map);
-
+        assaultheat = new google.maps.visualization.HeatmapLayer({
+          data: assault
+        });
+        robberyheat = new google.maps.visualization.HeatmapLayer({
+          data: robbery
+        });
+        arrestheat = new google.maps.visualization.HeatmapLayer({
+          data: arrest
+        });
+        burglaryheat = new google.maps.visualization.HeatmapLayer({
+          data: burglary
+        });
       }
 
+      //Opacity Slider
+      $(function() {
+        $("#slider").slider({
+          value:.6,
+          min: 0,
+          max: .8,
+          step: .2,
+          slide: function( event, ui ) {
+            theftheat.setOptions({opacity: ui.value});
+            assaultheat.setOptions({opacity: ui.value});
+            robberyheat.setOptions({opacity: ui.value});
+            arrestheat.setOptions({opacity: ui.value});
+            burglaryheat.setOptions({opacity: ui.value});
 
-      //Window Open, setup the map
-      google.maps.event.addDomListener(window, 'load', initialize);
+          }
+        });
+      });
 
       //Open the Business JSON and plot the Business on Map
       $.getJSON('data/yelpBusiness.json', function(data) {
@@ -335,34 +409,170 @@
           });
         });
       });
-      
-      //Crime Data
+
+      /*
+      //Sample Crime Data
       $.getJSON('testData/testcrimes.json', function(data) {
         $.each(data, function(key, val) {
           var crime = new google.maps.LatLng(val['coords'][0],val['coords'][1]);
-          console.log(crime);
-          crimes.push(crime);
+          murder.push(crime);
         });
       });
+      */
+
+      //Crime Data
+      $.getJSON('data/2007LatLng.json', function(data) {
+        $.each(data, function(key, val) {
+          var crime = new google.maps.LatLng(val['Latitude'],val['Longitude']);
+          if (val['Type'] == 'Assault'){
+            assault.push(crime);
+          }
+          if (val['Type'] == 'Arrest'){
+            arrest.push(crime);
+          }
+          if (val['Type'] == 'Burglary'){
+            burglary.push(crime);
+          }
+          if (val['Type'] == 'Robbery'){
+            robbery.push(crime);
+          }
+          if (val['Type'] == 'Theft'){
+            theft.push(crime);
+          }          
+        });
+      });
+
+      //Crime Data
+      $.getJSON('data/2008LatLng.json', function(data) {
+        $.each(data, function(key, val) {
+          console.log('hi');
+          var crime = new google.maps.LatLng(val['Latitude'],val['Longitude']);
+          console.log(val['Latitude']);
+          if (val['Type'] == 'Assault'){
+            assault.push(crime);
+          }
+          if (val['Type'] == 'Arrest'){
+            arrest.push(crime);
+          }
+          if (val['Type'] == 'Robbery'){
+            robbery.push(crime);
+          }
+          if (val['Type'] == 'Theft'){
+            theft.push(crime);
+          }  
+        });
+      });
+
+      //Crime Data
+      $.getJSON('data/2009LatLng.json', function(data) {
+        $.each(data, function(key, val) {
+          console.log('hi');
+          var crime = new google.maps.LatLng(val['Latitude'],val['Longitude']);
+          console.log(val['Latitude']);
+          if (val['Type'] == 'Assault'){
+            assault.push(crime);
+          }
+          if (val['Type'] == 'Arrest'){
+            arrest.push(crime);
+          }
+          if (val['Type'] == 'Robbery'){
+            robbery.push(crime);
+          }
+          if (val['Type'] == 'Theft'){
+            theft.push(crime);
+          }  
+        });
+      });
+
+      //Crime Data
+      $.getJSON('data/2010LatLng.json', function(data) {
+        $.each(data, function(key, val) {
+          console.log('hi');
+          var crime = new google.maps.LatLng(val['Latitude'],val['Longitude']);
+          console.log(val['Latitude']);
+          if (val['Type'] == 'Assault'){
+            assault.push(crime);
+          }
+          if (val['Type'] == 'Arrest'){
+            arrest.push(crime);
+          }
+          if (val['Type'] == 'Robbery'){
+            robbery.push(crime);
+          }
+          if (val['Type'] == 'Theft'){
+            theft.push(crime);
+          }  
+        });
+      });
+
+      //Crime Data
+      $.getJSON('data/2011LatLng.json', function(data) {
+        $.each(data, function(key, val) {
+          console.log('hi');
+          var crime = new google.maps.LatLng(val['Latitude'],val['Longitude']);
+          console.log(val['Latitude']);
+          if (val['Type'] == 'Assault'){
+            assault.push(crime);
+          }
+          if (val['Type'] == 'Arrest'){
+            arrest.push(crime);
+          }
+          if (val['Type'] == 'Robbery'){
+            robbery.push(crime);
+          }
+          if (val['Type'] == 'Theft'){
+            theft.push(crime);
+          }  
+        });
+      });
+
+
+
+      //Window Open, setup the map
+      google.maps.event.addDomListener(window, 'load', initialize);
+      
     </script>
   </head>
 
   <body>
-    <div id="business-filters">
-      <div id="dd" class="wrapper-dropdown-4">Businesses
-        <ul class="dropdown">
-          <li><input type="checkbox" onClick="boxclick(this,'all')" id="el-0" name="el-0"><label for="el-0">All</label></li>
-          <li><input type="checkbox" onClick="boxclick(this,'Restaurants')" id="el-1" name="el-1"><label for="el-1">Restaurants</label></li>
-          <li><input type="checkbox" onClick="boxclick(this,'Health & Medical')" id="el-2" name="el-2"><label for="el-2">Health & Medical</label></li>
-          <li><input type="checkbox" onClick="boxclick(this,'Beauty & Spas')" id="el-3" name="el-3"><label for="el-3">Beauty & Spas</label></li>
-        </ul>
+    <div id="filters">
+      <div id="business">
+        <div id="biz" class="wrapper-dropdown-4">Business
+          <ul class="dropdown">
+            <li><input type="checkbox" onClick="boxclick(this,'all')" id="b-0" name="b"><label for="b-0">All</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Restaurants')" id="b-1" name="b"><label for="b-1">Restaurants</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Health & Medical')" id="b-2" name="b"><label for="b-2">Health & Medical</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Beauty & Spas')" id="b-3" name="b"><label for="b-3">Beauty & Spas</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Hotels')" id="b-4" name="b"><label for="b-4">Hotels</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Parks')" id="b-5" name="b"><label for="b-5">Parks</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Golf')" id="b-6" name="b"><label for="b-6">Golf</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Gyms')" id="b-7" name="b"><label for="b-7">Gyms</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Bars')" id="b-8" name="b"><label for="b-8">Bars</label></li>
+          </ul>
+        </div>
+      </div>
+      <div id="opacity">
+        <label id="crimeop">Crime Opacity</label>
+        <div id="slider"></div>
+      </div>
+      <div id="crime">
+        <div id="cri"  class="wrapper-dropdown-4">Crime
+          <ul class="dropdown">
+            <li><input type="checkbox" onClick="boxclick(this,'Assault')" id="c-1" name="c"><label for="c-1">Assault</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Arrest')" id="c-2" name="c"><label for="c-2">Arrest</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Burglary')" id="c-3" name="c"><label for="c-3">Burglary</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Robbery')" id="c-4" name="c"><label for="c-4">Robbery</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Theft')" id="c-5" name="c"><label for="c-5">Theft</label></li>
+          </ul>
+        </div>
       </div>
     </div>
+    <div id="logo"> <img id="logoimg" src="images/strime.png"/></div>
     <div id="map-canvas"/> </div>
     <div id="info">
       <div class='container'>
         <div id='ins' class='instruct'>
-          <div class='itext'><p class="blank">Click on a business to begin.</p></div>
+          <div class='itext'><p class="blank">Welcome to Strime!<br><br>Choose any filter from the menus to begin. <br><br>Click on a business for more info.</p></div>
         </div>
         <div id="tab" class="details">
           <ul class="vtabs"><li class="active"><a href="#tab3_1">Details</a></li></ul>
@@ -390,6 +600,9 @@
           </div>
         </div>
       </div>
+    </div>
+    <div id="authors">
+      <p>Created By: Avid Ghamsari & Blake Pavel </p>
     </div>
   </body>
 </html>
