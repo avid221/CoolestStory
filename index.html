@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkqioUZBKHC9K_6aUQZjQ0EXlQXaYIkQo&sensor=false&libraries=visualization"></script>
     <script type="text/javascript">
       var markers = [];
@@ -418,29 +419,128 @@
 
           //Show Details of Marker when Clicked in Side Panel
           google.maps.event.addListener(marker, 'click', function() {
+            $('#charts').empty();
             document.getElementById("name_val").innerText=val['name'];
             document.getElementById("add_val").innerText=val['full_address'];
             document.getElementById("cat_val").innerText=val['categories'];
             document.getElementById("review_val").innerText=val['review_count'];
             document.getElementById("rate_val").innerText=val['stars'] + ' out of 5.';
 
-            var lon = val['Longitude'];
-            var lat = val['Latitude'];
-            var DIFF = .1;
-            var filtercrime = [];
+            var lon = parseFloat(val['longitude']);
+            var lat = parseFloat(val['latitude']);
+            var DIFF = .01;
+            var assaultcount = 0;
+            var arrestcount = 0;
+            var burglarycount = 0; 
+            var robberycount = 0;
+            var theftcount = 0; 
 
             $.getJSON('data/2007LatLng.json', function(data) {
-              $.each(data, function(key, val) {
-                if (currentcrime.indexOf(val['Type'] != -1){
-                  filtercrime.push(val);
+              $.each(data, function(key, row) {
+                if (currentcrime.indexOf(row['Type'] != -1)){
+                  if (Math.abs(lat - parseFloat(row['Latitude'])) <= DIFF && Math.abs(lon - parseFloat(row['Longitude'])) <= DIFF){
+                    switch(row['Type']){
+                      case 'Assault':
+                        assaultcount +=1;
+                        break;
+                      case 'Arrest':
+                        arrestcount +=1;
+                        break;
+                      case 'Burglary':
+                        burglarycount +=1;
+                        break;
+                      case 'Robbery':
+                        robberycount +=1;
+                        break;
+                      case 'Theft':
+                        theftcount +=1;
+                        break;
+                    }
+                  }
                 }
               });
+
+              var assaultratio = parseFloat(val['stars'])/assaultcount;
+              var arrestratio = parseFloat(val['stars'])/arrestcount;
+              var burglaryratio = parseFloat(val['stars'])/burglarycount;
+              var robberyratio = parseFloat(val['stars'])/robberycount;
+              var theftratio = parseFloat(val['stars'])/theftcount;
+
+              var dataset = {
+                names: ['Assault', 'Arrest', 'Burglary', 'Robbery', 'Theft'],
+                crimes: [parseFloat(assaultcount), parseFloat(arrestcount), parseFloat(burglarycount), parseFloat(robberycount), parseFloat(theftcount)],
+                ratios: [assaultratio, arrestratio, burglaryratio, robberyratio, theftratio]
+              };
+
+              var width = 400,
+                height = 200,
+                radius = Math.min(width, height) / 2;
+
+              var color = d3.scale.category20();
+
+              var pie = d3.layout.pie()
+                .sort(null);
+
+              var arc = d3.svg.arc()
+                .innerRadius(radius - 100)
+                .outerRadius(radius - 20);
+
+              var svg = d3.select("#charts").append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .append("g")
+                .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+              var path = svg.selectAll("path")
+                .data(pie(dataset.crimes))
+                .enter().append("path")
+                .attr("fill", function(d, i) { return color(i); })
+                .attr("d", arc)
+                .each(function(d) { this._current = d; }); // store the initial values
+
+              var legend = d3.select("#charts").append("svg")
+                .attr("class", "legend")
+                .attr("width", radius * 2)
+                .attr("height", radius * 2)
+                .selectAll("g")
+                .data(color.domain().slice().reverse())
+                .enter().append("g")
+                .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+              legend.append("rect")
+                .attr("width", 18)
+                .attr("height", 18)
+                .style("fill", color);
+
+              legend.append("text")
+                .attr("x", 24)
+                .attr("y", 9)
+                .attr("dy", ".35em")
+                .text(function(d, i) { return dataset.names[i]; });
+
+              d3.selectAll("#d3_1").on("change", change);
+
+              var timeout = setTimeout(function() {
+                d3.select("#d3_1[value=\"ratios\"]").property("checked", true).each(change);
+              }, 2000);
+
+              function change() {
+                clearTimeout(timeout);
+                path = path.data(pie(dataset[this.value])); // update the data
+                path.transition().duration(750).attrTween("d", arcTween); // redraw the arcs
+              }
+
+              // Store the displayed angles in _current.
+              // Then, interpolate from _current to the new angles.
+              // During the transition, _current is updated in-place by d3.interpolate.
+              function arcTween(a) {
+                var i = d3.interpolate(this._current, a);
+                this._current = i(0);
+                return function(t) {
+                  return arc(i(t));
+                };
+              }
             });
-
-            var counters = {};
-
-
-
 
             //Show Details and Hide Instructions
             document.getElementById("tab").style.display = 'block';
@@ -448,16 +548,6 @@
           });
         });
       });
-
-      /*
-      //Sample Crime Data
-      $.getJSON('testData/testcrimes.json', function(data) {
-        $.each(data, function(key, val) {
-          var crime = new google.maps.LatLng(val['coords'][0],val['coords'][1]);
-          murder.push(crime);
-        });
-      });
-      */
 
       //Crime Data
       $.getJSON('data/2007LatLng.json', function(data) {
@@ -635,6 +725,13 @@
             <div class="drow">
               <div class="dlabel">Rating</div>
               <div id="rate_val" class="dvalue"></div>
+            </div>
+            <div class="drow">
+              <div class="dlabel" id="d3catch">Rating</div>
+                <div><label><input id="d3_1" type="radio" name="dataset" value="crimes" checked> Crimes</label></div>
+                <div><label><input id="d3_1" type="radio" name="dataset" value="ratios"> Ratios</label></div>
+                <div id="charts"></div>
+
             </div>
           </div>
         </div>

@@ -1,7 +1,13 @@
+
+.arc path {
+  stroke: #fff;
+}
+
 html { 
 	height: 100%;
 }
 body { 
+    font: 10px;
 	font-family: 'Source Sans Pro', sans-serif; 
 	height: 100%; 
 	margin: 0; 
@@ -94,6 +100,8 @@ ul.vtabs {margin:0px; padding:0px; list-style:none; height:25px;}
 ul.vtabs li {padding:0px; height:25px; line-height:25px; background:#fff; overflow:hidden;}
 ul.vtabs li a {text-decoration:none; color:black; display:block; padding: 0 10px; font-size:13px;}
 ul.vtabs li a:hover {background:#ccc;}
+.vcontent {border:1px solid #c0c0c0; margin-bottom:0px; background: #e0e0e0; overflow:hidden; border-bottom:0px}
+.vcontent_active {background:white; overflow:hidden;}
 
 .blank {font-size:48px; color: #C2C2C2; margin:15px}
 #icontainer {position:absolute; top:0; left:0; z-index:100; width:232px; display:none}
