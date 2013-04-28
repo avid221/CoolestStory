@@ -19,7 +19,7 @@
       var burglary = [];
       var theftheat, assaultheat, robberyheat, arrestheat, burglaryheat;
       var map;
-      var currentcrime = [];
+      var currentcrime = ['None'];
       var currentbusiness = [];
 
       Array.prototype.remove = function() {
@@ -435,27 +435,28 @@
             var robberycount = 0;
             var theftcount = 0; 
 
+            console.log(currentcrime);
+            console.log(currentcrime.indexOf('Assault'));
+            console.log(currentcrime.indexOf('Arrest'));
             $.getJSON('data/2007LatLng.json', function(data) {
               $.each(data, function(key, row) {
-                if (currentcrime.indexOf(row['Type'] != -1)){
-                  if (Math.abs(lat - parseFloat(row['Latitude'])) <= DIFF && Math.abs(lon - parseFloat(row['Longitude'])) <= DIFF){
-                    switch(row['Type']){
-                      case 'Assault':
-                        assaultcount +=1;
-                        break;
-                      case 'Arrest':
-                        arrestcount +=1;
-                        break;
-                      case 'Burglary':
-                        burglarycount +=1;
-                        break;
-                      case 'Robbery':
-                        robberycount +=1;
-                        break;
-                      case 'Theft':
-                        theftcount +=1;
-                        break;
-                    }
+                if (Math.abs(lat - parseFloat(row['Latitude'])) <= DIFF && Math.abs(lon - parseFloat(row['Longitude'])) <= DIFF){
+                  switch(row['Type']){
+                    case 'Assault':
+                      assaultcount +=1;
+                      break;
+                    case 'Arrest':
+                      arrestcount +=1;
+                      break;
+                    case 'Burglary':
+                      burglarycount +=1;
+                      break;
+                    case 'Robbery':
+                      robberycount +=1;
+                      break;
+                    case 'Theft':
+                      theftcount +=1;
+                      break;
                   }
                 }
               });
@@ -467,11 +468,12 @@
               var theftratio = parseFloat(val['stars'])/theftcount;
 
               var dataset = {
-                names: ['Assault', 'Arrest', 'Burglary', 'Robbery', 'Theft'],
+                names: ['Theft', 'Robbery', 'Burglary', 'Arrest','Assault'],
                 crimes: [parseFloat(assaultcount), parseFloat(arrestcount), parseFloat(burglarycount), parseFloat(robberycount), parseFloat(theftcount)],
                 ratios: [assaultratio, arrestratio, burglaryratio, robberyratio, theftratio]
               };
 
+              console.log(dataset);
               var width = 400,
                 height = 200,
                 radius = Math.min(width, height) / 2;
