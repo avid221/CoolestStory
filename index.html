@@ -18,53 +18,75 @@
       var burglary = [];
       var theftheat, assaultheat, robberyheat, arrestheat, burglaryheat;
       var map;
+      var currentcrime = [];
+      var currentbusiness = [];
 
+      Array.prototype.remove = function() {
+        var what, a = arguments, L = a.length, ax;
+        while (L && this.length) {
+            what = a[--L];
+            while ((ax = this.indexOf(what)) !== -1) {
+                this.splice(ax, 1);
+            }
+        }
+        return this;
+      };
 
       function boxclick(box,category){
         if (box.name == 'b'){
-          console.log('yo')
           if (box.checked){
             show(category);
+            currentbusiness.push(category);
           }else {
             hide(category);
+            currentbusiness.remove(category);
           }
         }
+
         if (box.name == 'c'){
           if (box.checked){
-            console.log(category);
             switch (category){
               case 'Assault':
-                console.log('yo');
+                currentcrime.push(category);
                 assaultheat.setMap(map);
                 break;
               case 'Arrest':
+                currentcrime.push(category);
                 arrestheat.setMap(map);
                 break;
               case 'Burglary':
+                currentcrime.push(category);
                 burglaryheat.setMap(map);
                 break;
               case 'Robbery':
+                currentcrime.push(category);
                 robberyheat.setMap(map);
                 break;
               case 'Theft':
+                currentcrime.push(category);
                 theftheat.setMap(map);
                 break;
             }
           }else {
             switch (category){
               case 'Assault':
+                currentcrime.remove(category);
                 assaultheat.setMap(null);
                 break;
               case 'Arrest':
+                currentcrime.remove(category);
                 arrestheat.setMap(null);
                 break;
               case 'Burglary':
+                currentcrime.remove(category);
                 burglaryheat.setMap(null);
                 break;
               case 'Robbery':
+                currentcrime.remove(category);
                 robberyheat.setMap(null);
                 break;
               case 'Theft':
+                currentcrime.remove(category);
                 theftheat.setMap(null);
                 break;
             }
@@ -401,6 +423,23 @@
             document.getElementById("cat_val").innerText=val['categories'];
             document.getElementById("review_val").innerText=val['review_count'];
             document.getElementById("rate_val").innerText=val['stars'] + ' out of 5.';
+
+            var lon = val['Longitude'];
+            var lat = val['Latitude'];
+            var DIFF = .1;
+            var filtercrime = [];
+
+            $.getJSON('data/2007LatLng.json', function(data) {
+              $.each(data, function(key, val) {
+                if (currentcrime.indexOf(val['Type'] != -1){
+                  filtercrime.push(val);
+                }
+              });
+            });
+
+            var counters = {};
+
+
 
 
             //Show Details and Hide Instructions
