@@ -1,7 +1,5 @@
-CoolestStory
-============
-
 Strime
+============
 
 Compare Crime to Business Ratings
 
