@@ -528,6 +528,7 @@
                 .enter().append("path")
                 .attr("fill", function(d, i) { return color(i); })
                 .attr("d", arc)
+                .append("g")
                 .each(function(d) { this._current = d; }); // store the initial values
 
               var legend = d3.select("#legend").append("svg")
