@@ -577,7 +577,7 @@
             // End Pie Charts
 
             // Display Bullet Chart
-            $.getJSON('data/ratingAverages.json', function(data) {
+            $.getJSON('ratingAverages.json', function(data) {
               var average = 0;
               $.each(data, function(key, row) {
                 if(key == val['categories'][0]){
@@ -585,7 +585,7 @@
                 }
               });
               var margin = {top: 5, right: 40, bottom: 20, left: 120},
-                width = 600 - margin.left - margin.right,
+                width = 450 - margin.left - margin.right,
                 height = 50 - margin.top - margin.bottom;
 
               var chart = d3.bullet()
