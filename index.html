@@ -12,6 +12,7 @@
     <script src="js/bullet.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkqioUZBKHC9K_6aUQZjQ0EXlQXaYIkQo&sensor=false&libraries=visualization"></script>
     <script type="text/javascript">
+      var allcrimes = [];
       var markers = [];
       var theft = [];
       var assault = []; 
@@ -442,8 +443,8 @@
             //console.log(currentcrime.indexOf('Arrest'));
 
             // Display Pie Charts
-            $.getJSON('data/2007LatLng.json', function(data) {
-              $.each(data, function(key, row) {
+
+              $.each(allcrimes, function(key, row) {
                 if (Math.abs(lat - parseFloat(row['Latitude'])) <= DIFF && Math.abs(lon - parseFloat(row['Longitude'])) <= DIFF){
                   switch(row['Type']){
                     case 'Assault':
@@ -505,7 +506,7 @@
 
               console.log(dataset);
               var width = 200,
-                height = 225,
+                height = 200,
                 radius = Math.min(width, height) / 2;
 
               var color = d3.scale.category20();
@@ -528,7 +529,7 @@
                 .enter().append("path")
                 .attr("fill", function(d, i) { return color(i); })
                 .attr("d", arc)
-                .append("g")
+                //.append("g")
                 .each(function(d) { this._current = d; }); // store the initial values
 
               var legend = d3.select("#legend").append("svg")
@@ -552,15 +553,16 @@
                 .text(function(d, i) { return dataset.names[i]; });
 
               d3.selectAll("#d3_1").on("change", change);
-
+              
               var timeout = setTimeout(function() {
                 d3.select("#d3_1[value=\"ratios\"]").property("checked", true).each(change);
               }, 2000);
-
+              
               function change() {
                 clearTimeout(timeout);
                 path = path.data(pie(dataset[this.value])); // update the data
                 path.transition().duration(750).attrTween("d", arcTween); // redraw the arcs
+                console.log('tweening');
               }
 
               // Store the displayed angles in _current.
@@ -573,7 +575,6 @@
                   return arc(i(t));
                 };
               }
-            });
             // End Pie Charts
 
             // Display Bullet Chart
@@ -595,7 +596,7 @@
               var data = [
               {"title":"Rating", "subtitle":"Stars, out of 5", "ranges":[5], "measures":[val['stars']], "markers":[average]}
               ];
-              console.log(data);
+              //console.log(data);
               var svg = d3.select("#bullet").selectAll("svg")
                   .data(data)
                 .enter().append("svg")
@@ -633,6 +634,7 @@
       //Crime Data
       $.getJSON('data/2007LatLng.json', function(data) {
         $.each(data, function(key, val) {
+          allcrimes.push(val);
           var crime = new google.maps.LatLng(val['Latitude'],val['Longitude']);
           if (val['Type'] == 'Assault'){
             assault.push(crime);
@@ -655,6 +657,7 @@
       //Crime Data
       $.getJSON('data/2008LatLng.json', function(data) {
         $.each(data, function(key, val) {
+          allcrimes.push(val);
           var crime = new google.maps.LatLng(val['Latitude'],val['Longitude']);
           if (val['Type'] == 'Assault'){
             assault.push(crime);
@@ -674,6 +677,7 @@
       //Crime Data
       $.getJSON('data/2009LatLng.json', function(data) {
         $.each(data, function(key, val) {
+          allcrimes.push(val);
           var crime = new google.maps.LatLng(val['Latitude'],val['Longitude']);
           if (val['Type'] == 'Assault'){
             assault.push(crime);
@@ -693,6 +697,7 @@
       //Crime Data
       $.getJSON('data/2010LatLng.json', function(data) {
         $.each(data, function(key, val) {
+          allcrimes.push(val);
           var crime = new google.maps.LatLng(val['Latitude'],val['Longitude']);
           if (val['Type'] == 'Assault'){
             assault.push(crime);
@@ -712,6 +717,7 @@
       //Crime Data
       $.getJSON('data/2011LatLng.json', function(data) {
         $.each(data, function(key, val) {
+          allcrimes.push(val);
           var crime = new google.maps.LatLng(val['Latitude'],val['Longitude']);
           if (val['Type'] == 'Assault'){
             assault.push(crime);
@@ -750,6 +756,7 @@
             <li><input type="checkbox" onClick="boxclick(this,'Golf')" id="b-6" name="b"><label for="b-6">Golf</label></li>
             <li><input type="checkbox" onClick="boxclick(this,'Gyms')" id="b-7" name="b"><label for="b-7">Gyms</label></li>
             <li><input type="checkbox" onClick="boxclick(this,'Bars')" id="b-8" name="b"><label for="b-8">Bars</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Skate Parks')" id="b-9" name="b"><label for="b-9">Skate Parks</label></li>
           </ul>
         </div>
       </div>
