@@ -401,6 +401,9 @@
           if(val['categories'].indexOf('Casinos') != -1) {
             var image = 'images/casino.png';
           }
+          if(val['categories'].indexOf('Ice Cream & Frozen Yogurt') != -1) {
+            var image = 'images/icecream.png';
+          }
           var myLatLng = new google.maps.LatLng(val['latitude'], val['longitude']);
 
           // Create Marker
@@ -757,6 +760,9 @@
             <li><input type="checkbox" onClick="boxclick(this,'Gyms')" id="b-7" name="b"><label for="b-7">Gyms</label></li>
             <li><input type="checkbox" onClick="boxclick(this,'Bars')" id="b-8" name="b"><label for="b-8">Bars</label></li>
             <li><input type="checkbox" onClick="boxclick(this,'Skate Parks')" id="b-9" name="b"><label for="b-9">Skate Parks</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Fast Food')" id="b-10" name="b"><label for="b-10">Fast Food</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Ice Cream & Frozen Yogurt')" id="b-11" name="b"><label for="b-11">Ice Cream & Frozen Yogurt</label></li>
+            <li><input type="checkbox" onClick="boxclick(this,'Shopping')" id="b-12" name="b"><label for="b-12">Shopping</label></li>
           </ul>
         </div>
       </div>
